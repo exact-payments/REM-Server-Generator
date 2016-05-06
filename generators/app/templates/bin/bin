@@ -1,0 +1,21 @@
+#! /usr/bin/env node
+
+var pkg = require('../package');
+
+console.log();
+console.log();
+<%- splashSrc %>
+console.log();
+console.log();
+console.log('version: ' + pkg.version + ' revision: ' + pkg.revision);
+console.log();
+console.log();
+
+
+var accountD = require('../');
+
+
+accountD.start((err, result) => {
+  if (err) { throw err; }
+  accountD.logger.info('Listening for HTTP requests at %s', result.url);
+});

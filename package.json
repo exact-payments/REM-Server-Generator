@@ -1,0 +1,29 @@
+{
+  "name": "generator-rem-server",
+  "version": "0.1.0",
+  "description": "A generator for creating REM Servers. REM Server stands for Robert's Express & Mongo Server.",
+  "homepage": "",
+  "author": "Robert Hurst<robertwhurst@gmail.com>",
+  "main": "generators/server/index.js",
+  "files": [
+    "generators/route",
+    "generators/schema",
+    "generators/server"
+  ],
+  "keywords": [
+    "REM Server",
+    "yoman-generator",
+    "server-generator",
+    "express",
+    "mongo",
+    "yeoman-generator"
+  ],
+  "dependencies": {
+    "chalk": "^1.0.0",
+    "figlet": "^1.1.1",
+    "yeoman-generator": "^0.22.0",
+    "yosay": "^1.0.2"
+  },
+  "repository": "RobertWHurst/generator-rem-server",
+  "license": "MIT"
+}
