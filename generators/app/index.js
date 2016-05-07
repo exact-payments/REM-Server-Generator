@@ -3,6 +3,7 @@ var yosay      = require('yosay');
 var chalk      = require('chalk');
 var figlet     = require('figlet');
 var generators = require('yeoman-generator');
+var fs         = require('fs');
 
 
 var toCase = (str, strCase) => {
@@ -344,6 +345,7 @@ var serverGenerator = generators.Base.extend({
   },
 
   install: function() {
+    fs.chmodSync(this.destinationPath('bin/' + this.serverName), 0755);
     this.installDependencies();
   }
 });
