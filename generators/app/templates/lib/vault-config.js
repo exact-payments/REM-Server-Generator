@@ -2,7 +2,7 @@ const request = require('request');
 
 
 const compileConfig = (secureData, config) => {
-  for (let prop in config) {
+  for (const prop in config) {
     if (!config[prop]) { continue; }
 
     if (typeof config[prop] === 'object') {
@@ -52,8 +52,8 @@ const compileVaultConfig = (url, token, config, cb) => {
     return cb(null);
   }
 
-  const reAttemptIn      = 100;
-  const numberOfattempts = 0;
+  let   reAttemptIn      = 100;
+  let   numberOfattempts = 0;
   const makeRequest = () => {
 
     request.get(url, {
@@ -116,7 +116,7 @@ const compileVaultConfig = (url, token, config, cb) => {
 
       if (res.statusCode !== 200) {
         return cb(new Error(
-          'Expected a statusCode of 200 from Vault but got ' + res.statusCode +
+          `Expected a statusCode of 200 from Vault but got ${res.statusCode}` +
           ' instead.'
         ));
       }

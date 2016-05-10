@@ -218,10 +218,10 @@ var serverGenerator = generators.Base.extend({
       );
     },
 
-    jscsrc: function() {
+    eslintrc: function() {
       this.fs.copy(
-        this.templatePath('jscsrc'),
-        this.destinationPath('.jscsrc')
+        this.templatePath('eslintrc.json'),
+        this.destinationPath('.eslintrc.json')
       );
     },
 
@@ -259,7 +259,10 @@ var serverGenerator = generators.Base.extend({
       this.fs.copyTpl(
         this.templatePath('bin/bin'),
         this.destinationPath('bin/' + this.serverName),
-        { splashSrc: this.splashSrc }
+        {
+          splashSrc         : this.splashSrc,
+          serverInstanceName: this.serverInstanceName
+        }
       );
     },
 

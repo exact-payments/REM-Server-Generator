@@ -6,13 +6,11 @@ const mongooseSlugs = (schema, opts) => {
   opts.sourceField   || (opts.sourceField   = 'name');
   opts.maxLength     || (opts.maxLength     = 30);
   opts.maxAliases    || (opts.maxAliases    = 30);
-  opts.slugGenerator || (opts.slugGenerator = (val) => {
-    return val
-      .replace(/([\w\d])'([\w\d])/g, '$1$2')
-      .replace(/([\w\d])[^\w\d]+([\w\d])/g, '$1-$2')
-      .replace(/[^\w\d-]+/g, '')
-      .toLowerCase();
-  });
+  opts.slugGenerator || (opts.slugGenerator = (val) => val
+    .replace(/([\w\d])'([\w\d])/g, '$1$2')
+    .replace(/([\w\d])[^\w\d]+([\w\d])/g, '$1-$2')
+    .replace(/[^\w\d-]+/g, '')
+    .toLowerCase());
 
   const setSlug = function(newSlug) {
     if (!this.slug || this.slug === newSlug) { return newSlug; }
@@ -68,7 +66,7 @@ const mongooseSlugs = (schema, opts) => {
         slugAliasBiasedConditions.aliasSlugs = slugAliasBiasedConditions.slug;
         delete slugAliasBiasedConditions.slug;
 
-        for (let prop in conditions) { delete conditions[prop]; }
+        for (const prop in conditions) { delete conditions[prop]; }
 
         conditions.$or = [
           slugBiasedConditions,
@@ -163,12 +161,12 @@ const mongooseSlugs = (schema, opts) => {
         if (err) { return cb(err); }
 
         let   ii      = 0;
-        let   results = { n: 0, nModified: 0 };
-        const onDocumentUpdated = (err, results) => {
+        const results = { n: 0, nModified: 0 };
+        const onDocumentUpdated = (err, updateResults) => {
           if (err) { return cb(err); }
 
-          results.n         += results.n;
-          results.nModified += results.nModified;
+          results.n         += updateResults.n;
+          results.nModified += updateResults.nModified;
 
           ii += 1;
           if (ii === documents.length) {
@@ -210,7 +208,7 @@ const mongooseSlugs = (schema, opts) => {
   schema.method('_suffixSlug', function(slug, cb) {
     this.constructor.findOne({
       _id        : { $ne: this._id },
-      slug       : { $regex: '^' + slug },
+      slug       : { $regex: `^${slug}` },
       $aliasSlugs: false
     }).sort('-slug').select('slug').exec((err, document) => {
       if (err) { return cb(err); }
@@ -220,7 +218,7 @@ const mongooseSlugs = (schema, opts) => {
       const lastSlugSuffix = document.slug.slice(slug.length + 1);
       const slugSuffix     = lastSlugSuffix ? parseFloat(lastSlugSuffix) + 1 : 2;
 
-      cb(null, slug + '-' + slugSuffix);
+      cb(null, `${slug}-${slugSuffix}`);
     });
   });
 

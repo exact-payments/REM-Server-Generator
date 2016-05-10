@@ -1,12 +1,10 @@
 const http              = require('http');
 const url               = require('url');
-const qs                = require('qs');
 const express           = require('express');
 const expressBodyParser = require('body-parser');
 const expressRest       = require('express-rest-api');
 const prettyMs          = require('pretty-ms');
 const onFinished        = require('on-finished');
-const createDomain      = require('domain').create;
 const config            = require('../config');
 
 <%- routerRequireSrc %>
@@ -89,7 +87,7 @@ class Server {
 
   _setupExpressRoutes() {
     this.logger.verbose('Attaching resource routers to express app');
-<%- routerSetupSrc %>
+    <%- routerSetupSrc %>
     this.logger.verbose('Resource routers attached');
   }
 
@@ -103,7 +101,7 @@ class Server {
     });
     this.logger.verbose('Error handler attached');
   }
-};
+}
 
 Server.statusCodeByErrorName = {
   ValidationError: 400,

@@ -10,7 +10,8 @@
   "scripts": {
     "start": "./bin/<%= serverName %>",
     "test": "mocha --bail test/*.spec.js",
-    "debug": "node-debug _mocha test/*.spec.js",
+    "debug-start": "node-debug ./bin/<%= serverName %>",
+    "debug-test": "node-debug _mocha test/*.spec.js",
     "cover": "istanbul cover _mocha test/*.spec.js",
     "explain-config": "./bin/<%= serverName %> --explain-config"
   },
@@ -27,7 +28,6 @@
     "express": "^4.13.1",
     "express-rest-api": "^0.1.0",
     "extend": "^3.0.0",
-    "flat": "^1.6.0",
     "milieu": "0.0.6",
     "mongoose": "^4.4.9",
     "mongoose-count-and-find": "^1.0.0",
@@ -42,6 +42,11 @@
     "winston": "^2.1.1"
   },
   "devDependencies": {
+    "eslint": "^2.9.0",
+    "eslint-config-airbnb": "^9.0.1",
+    "eslint-plugin-import": "^1.7.0",
+    "eslint-plugin-jsx-a11y": "^1.2.0",
+    "eslint-plugin-react": "^5.1.1",
     "faker": "^3.0.1",
     "istanbul": "^0.4.2",
     "methods": "^1.1.1",

@@ -1,11 +1,11 @@
-var MongoClient = require('mongodb').MongoClient;
-var config      = require('./config');
+const MongoClient = require('mongodb').MongoClient;
+const config      = require('./config');
 
 
 module.exports = function(nomad) {
 
   nomad.driver({
-    connect: function(cb) {
+    connect(cb) {
       MongoClient.connect(config.server.url, (err, db) => {
         if (err) { return cb(err); }
         this.db = db;
@@ -13,23 +13,23 @@ module.exports = function(nomad) {
       });
     },
 
-    disconnect: function(cb) {
+    disconnect(cb) {
       this.db.close(cb);
     },
 
-    createMigration: function(migration, cb) {
+    createMigration(migration, cb) {
       this.db.collection('migrations').insertOne(migration, cb);
     },
 
-    updateMigration: function(filename, migration, cb) {
+    updateMigration(filename, migration, cb) {
       this.db.collection('migrations').updateOne({
-        filename: filename
+        filename
       }, {
         $set: migration
       }, cb);
     },
 
-    getMigrations: function(cb) {
+    getMigrations(cb) {
       this.db.collection('migrations').find().toArray(cb);
     }
   });

@@ -62,10 +62,10 @@ class Database {
 
   _setupMongooseModels() {
     this.logger.verbose('Registering models');
-<%- schemaSetupSrc %>
+    <%- schemaSetupSrc %>
     this.logger.verbose('Models registered');
   }
-};
+}
 
 
 module.exports = Database;

@@ -1,4 +1,5 @@
-const router = require('express').Router();
+const Router = require('express').Router;
+const router = new Router();
 
 
 function create<%= className %>(req, res, next) {

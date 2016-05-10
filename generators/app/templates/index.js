@@ -1,12 +1,6 @@
-var pkg      = require('./package');
-var config   = require('./config');
-var logger   = require('./logger');
-var <%= serverClassName %> = require('./lib/<%= serverName %>');
-
-
-try {
-  pkg.revision = readFileSync(require.resolve('../REVISION'));
-} catch (e) {}
+const config = require('./config');
+const logger = require('./logger');
+const <%= serverClassName %> = require('./lib/<%= serverName %>');
 
 
 exports = module.exports = new <%= serverClassName %>(config, logger);

@@ -1,6 +1,5 @@
 const winston  = require('winston');
 const raven    = require('raven');
-const inherits = require('util').inherits;
 
 
 class SentryTransport extends winston.Transport {
@@ -30,7 +29,7 @@ class SentryTransport extends winston.Transport {
     this.ravenClient.captureException(err, meta);
     next(null);
   }
-};
+}
 
 
 module.exports = SentryTransport;

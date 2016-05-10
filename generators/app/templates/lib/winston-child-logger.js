@@ -46,7 +46,7 @@ class ChildLogger {
         args.splice(metaIndex + 1, 0, meta);
       }
 
-      for (let key in this.meta) {
+      for (const key in this.meta) {
         meta[key] = this.meta[key];
       }
     }
@@ -57,7 +57,7 @@ class ChildLogger {
   child(prefix, meta) {
     return new ChildLogger(this, prefix, meta);
   }
-};
+}
 
 function extendLogger(logger) {
   logger.child = ChildLogger.prototype.child;

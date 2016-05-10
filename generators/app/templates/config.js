@@ -1,7 +1,7 @@
-var milieu = require('milieu');
+const milieu = require('milieu');
 
 
-var config = milieu('<%= serverConfigName %>', {
+const config = milieu('<%= serverConfigName %>', {
   server: {
     url            : 'http://localhost:8000',
     maxResultsLimit: 1000

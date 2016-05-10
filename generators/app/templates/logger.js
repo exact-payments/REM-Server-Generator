@@ -1,10 +1,10 @@
-var winston            = require('winston');
-var winstonChildLogger = require('./lib/winston-child-logger');
-var SentryTransport    = require('./lib/winston-sentry-transport');
-var config             = require('./config');
+const winston            = require('winston');
+const winstonChildLogger = require('./lib/winston-child-logger');
+const SentryTransport    = require('./lib/winston-sentry-transport');
+const config             = require('./config');
 
 
-var logger = winstonChildLogger(new winston.Logger());
+const logger = winstonChildLogger(new winston.Logger());
 
 logger.levelLength = 7;
 logger.padLevels   = true;

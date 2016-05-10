@@ -12,10 +12,10 @@ console.log();
 console.log();
 
 
-var accountD = require('../');
+var <%= serverInstanceName %> = require('../');
 
 
-accountD.start((err, result) => {
+<%= serverInstanceName %>.start((err, result) => {
   if (err) { throw err; }
-  accountD.logger.info('Listening for HTTP requests at %s', result.url);
+  <%= serverInstanceName %>.logger.info('Listening for HTTP requests at %s', result.url);
 });
