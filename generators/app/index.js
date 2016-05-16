@@ -189,6 +189,14 @@ var serverGenerator = generators.Base.extend({
   },
 
   writing: {
+
+    circle: function() {
+      this.fs.copy(
+        this.templatePath('_circle.yml'),
+        this.destinationPath('circle.yml')
+      );
+    },
+
     config: function() {
       this.fs.copyTpl(
         this.templatePath('config.js'),
