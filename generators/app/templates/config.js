@@ -6,11 +6,6 @@ const config = milieu('<%= serverConfigName %>', {
     url            : 'http://localhost:8000',
     maxResultsLimit: 1000
   },
-  user: {
-    passwordTtl          : 1000 * 60 * 60 * 24 * 90, // 90 days
-    passwordResetTokenTtl: 1000 * 60 * 60 * 24 * 90, // 90 days
-    verificationTokenTtl : 1000 * 60 * 60 * 24 * 90  // 90 days
-  },
   mongo: {
     url: 'mongodb://localhost/<%= databaseName %>'
   },
