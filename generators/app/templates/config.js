@@ -13,6 +13,11 @@ const config = milieu('<%= serverConfigName %>', {
     url  : '',
     token: ''
   },
+  consul: {
+    url       : 'http://localhost:8500',
+    statusPath: '/status',
+    interval  : 6000
+  },
   logger: {
     sentry: {
       dsn: ''

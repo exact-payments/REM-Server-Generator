@@ -12,10 +12,11 @@ const config            = require('../config');
 
 class Server {
 
-  constructor(config, logger, database) {
+  constructor(config, logger, database, tribune) {
     this.config   = config;
     this.logger   = logger.child({ context: 'Server' });
     this.database = database;
+    this.tribune  = tribune;
 
     this.logger.verbose('Creating express app and HTTP server instance');
     this.expressApp  = express();
@@ -42,10 +43,10 @@ class Server {
   }
 
   _setupExpressMiddleware() {
-
     this.expressApp.request.config       = this.config;
-    this.expressApp.request.model        = (modelName) => this.database.model(modelName);
-    this.expressApp.request.pingDatabase = (cb)        => this.database.ping(cb);
+    this.expressApp.request.service      = (...args) => this.tribune.service(...args);
+    this.expressApp.request.model        = (...args) => this.database.model(...args);
+    this.expressApp.request.pingDatabase = (...args) => this.database.ping(...args);
 
     const createReqLogger = (req, res, next) => {
       req._startTime = Date.now();
