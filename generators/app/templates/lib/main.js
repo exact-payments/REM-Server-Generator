@@ -1,5 +1,6 @@
 const async       = require('async');
 const Database    = require('./database');
+const Tribune     = require('tribune');
 const Server      = require('./server');
 const vaultConfig = require('./vault-config');
 
@@ -10,7 +11,8 @@ class <%= serverClassName %> {
     this.logger    = logger.child({ context: '<%= serverClassName %>' });
     this.isRunning = false;
     this.database  = new Database(config, this.logger);
-    this.server    = new Server(config, this.logger, this.database);
+    this.tribune   = new Tribune({ agentUrl: this.config.consul.url });
+    this.server    = new Server(config, this.logger, this.database, this.tribune);
   }
 
   start(cb) {
@@ -34,8 +36,16 @@ class <%= serverClassName %> {
       ], (err) => {
         if (err) { return cb(err); }
 
-        this.logger.verbose('<%= serverClassName %> ready and awaiting requests');
-        cb(null, { url: this.config.server.url });
+        this.logger.verbose('Registering <%= serverClassName %> as a service with Consul');
+        this.tribune.register('<%= serverClassName %>', {
+          url       : this.config.server.url,
+          interval  : this.config.consul.interval,
+          statusPath: this.config.consul.statusPath
+        }, (err) => {
+
+          this.logger.verbose('<%= serverClassName %> ready and awaiting requests');
+          cb(null, { url: this.config.server.url });
+        });
       });
     });
   }
