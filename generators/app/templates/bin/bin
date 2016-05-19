@@ -1,18 +1,18 @@
 #! /usr/bin/env node
 
-var pkg = require('../package');
+const pkg = require('../package');
 
 console.log();
 console.log();
 <%- splashSrc %>
 console.log();
 console.log();
-console.log('version: ' + pkg.version + ' revision: ' + pkg.revision);
+console.log(`version: ${pkg.version} revision: ${pkg.revision}`);
 console.log();
 console.log();
 
 
-var <%= serverInstanceName %> = require('../');
+const <%= serverInstanceName %> = require('../');
 
 
 <%= serverInstanceName %>.start((err, result) => {
