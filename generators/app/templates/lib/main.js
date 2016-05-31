@@ -63,8 +63,13 @@ class <%= serverClassName %> {
     ], (err) => {
       if (err) { return cb(err); }
 
-      this.logger.verbose('<%= serverClassName %> has closed all connections and successfully halted');
-      cb(null);
+      this.logger.verbose('Deregistering <%= serverClassName %> from Consul');
+      this.tribune.deregister((err) => {
+        if (err) { return cb(err); }
+
+        this.logger.verbose('<%= serverClassName %> has closed all connections and successfully halted');
+        cb(null);
+      });
     });
   }
 }
