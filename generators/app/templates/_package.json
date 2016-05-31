@@ -13,6 +13,8 @@
     "debug-start": "node-debug ./bin/<%= serverName %>",
     "debug-test": "node-debug _mocha test/*.spec.js",
     "cover": "istanbul cover _mocha test/*.spec.js",
+    "eslint": "eslint . --ext .js",
+    "demon": "nodemon ./bin/event-d",
     "explain-config": "./bin/<%= serverName %> --explain-config"
   },
   "author": {
