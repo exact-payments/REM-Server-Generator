@@ -3,7 +3,7 @@ const mongooseSlugs = require('../lib/mongoose-slugs');
 
 
 const <%= instanceName %>Schema = new Schema({
-  title: { type: String },
+  title: { type: String, required: true },
   body:  { type: String }
 });
 
