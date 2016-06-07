@@ -233,6 +233,13 @@ var serverGenerator = generators.Base.extend({
       );
     },
 
+    eslintignore: function() {
+      this.fs.copy(
+        this.templatePath('eslintignore.json'),
+        this.destinationPath('.eslintignore.json')
+      );
+    },
+
     logger: function() {
       this.fs.copy(
         this.templatePath('logger.js'),
