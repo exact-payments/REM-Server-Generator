@@ -165,12 +165,14 @@ var serverGenerator = generators.Base.extend({
         this.databaseName       = answers.databaseName;
         this.routers            = answers.routers || [];
         this.schemas            = answers.schemas || [];
+        this.resources          = answers.resources || [];
 
-        if (answers.resources) {
-          answers.resources.forEach((resouceName) => {
-            this.routers.push(resouceName);
-            this.schemas.push(resouceName);
+        if (this.resources) {
+          this.resources.forEach((resourceName) => {
+            this.routers.push(resourceName);
+            this.schemas.push(resourceName);
           });
+          this.resources = this.resources.map(genResourceNames);
         }
 
         this.routers = this.routers.map(genResourceNames);
@@ -295,8 +297,17 @@ var serverGenerator = generators.Base.extend({
     main: function() {
       this.fs.copyTpl(
         this.templatePath('lib/main.js'),
-        this.destinationPath('lib/' + this.serverName + '.js'),
+        this.destinationPath(`lib/${ this.serverName }.js`),
         { serverClassName: this.serverClassName }
+      );
+      this.fs.copyTpl(
+        this.templatePath('test/lib.main-d.spec.js'),
+        this.destinationPath(`test/lib.${ this.serverName }-d.spec.js`),
+        {
+          serverClassName: this.serverClassName,
+          serverInstanceName: this.serverInstanceName,
+          name: this.serverName
+        }
       );
     },
 
@@ -358,6 +369,49 @@ var serverGenerator = generators.Base.extend({
           _this.destinationPath('schema/' + schema.name + '.js'),
           schema
         );
+      });
+    },
+
+    resourceTests: function() {
+      let _this = this;
+      const otherFixtures = [ 'new', 'update' ];
+      const paths = [
+        'test/lib/assert-contains.js',
+        'test/lib.database.spec.js',
+        'test/mock/logger.js'
+      ];
+
+      paths.forEach( (path) => {
+        _this.fs.copy(
+          _this.templatePath(path),
+          _this.destinationPath(path)
+        );
+      });
+
+      _this.resources.forEach( (resource) => {
+        const templateArgs = {
+          instanceName: resource.instanceName,
+          className: resource.className,
+          name: resource.name,
+          serverInstanceName: _this.serverInstanceName
+        };
+        _this.fs.copyTpl(
+          _this.templatePath('test/route.spec.js'),
+          _this.destinationPath(`test/route.${ resource.name }.spec.js`),
+          templateArgs
+        );
+        _this.fs.copyTpl(
+          _this.templatePath('test/fixture/instance.js'),
+          _this.destinationPath(`test/fixture/${ resource.name }-1.js`),
+          templateArgs
+        );
+        otherFixtures.forEach( (fixture) => {
+          _this.fs.copyTpl(
+            _this.templatePath(`test/fixture/${fixture}.js`),
+            _this.destinationPath(`test/fixture/${fixture}-${ resource.name }-1.js`),
+            templateArgs
+          );
+        });
       });
     }
   },
