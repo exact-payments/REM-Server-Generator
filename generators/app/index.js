@@ -336,20 +336,6 @@ var serverGenerator = generators.Base.extend({
       );
     },
 
-    winstonChildLogger: function() {
-      this.fs.copy(
-        this.templatePath('lib/winston-child-logger.js'),
-        this.destinationPath('lib/winston-child-logger.js')
-      );
-    },
-
-    winstonSentryTransport: function() {
-      this.fs.copy(
-        this.templatePath('lib/winston-sentry-transport.js'),
-        this.destinationPath('lib/winston-sentry-transport.js')
-      );
-    },
-
     routers: function() {
       var _this = this;
       this.routers.forEach(function(router) {
