@@ -44,6 +44,21 @@ class Server {
     this._httpServer.close(cb);
   }
 
+  _setupServer() {
+    this.logger.verbose('Creating HTTP server instance');
+    if (this.config.server.sslKey && this.config.server.sslCert && this.config.server.sslCA) {
+      this._httpServer = https.createServer({
+        key : readFileSync(this.config.server.sslKey),
+        cert: readFileSync(this.config.server.sslCert),
+        ca  : readFileSync(this.config.server.sslCA)
+      }, this.expressApp);
+      this.logger.verbose('HTTP secure server instance created');
+      return;
+    }
+    this._httpServer = http.createServer(this.expressApp);
+    this.logger.verbose('HTTP server instance created');
+  }
+
   _setupExpressMiddleware() {
     this.expressApp.request.config       = this.config;
     this.expressApp.request.service      = (...args) => this.tribune.service(...args);
