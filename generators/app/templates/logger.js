@@ -1,6 +1,6 @@
 const winston            = require('winston');
-const winstonChildLogger = require('./lib/winston-child-logger');
-const SentryTransport    = require('./lib/winston-sentry-transport');
+const winstonChildLogger = require('winston-child-logger');
+const SentryTransport    = require('winston-sentry-transport');
 const config             = require('./config');
 
 

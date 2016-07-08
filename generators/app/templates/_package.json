@@ -40,9 +40,12 @@
     "request": "^2.58.0",
     "through2": "^2.0.0",
     "tribune": "^1.0.1",
-    "winston": "^2.1.1"
+    "winston": "^2.1.1",
+    "winston-child-logger": "0.0.1",
+    "winston-sentry-transport": "0.0.1"
   },
   "devDependencies": {
+    "assert-contains": "0.0.1",
     "eslint": "^2.9.0",
     "eslint-config-airbnb": "^9.0.1",
     "eslint-plugin-import": "^1.7.0",

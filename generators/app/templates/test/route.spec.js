@@ -4,7 +4,7 @@
 let request = require('request');
 const assert = require('assert');
 const sinon = require('sinon');
-const assertContains = require('./lib/assert-contains');
+const assertContains = require('assert-contains');
 const config = require('../config');
 
 const new<%= className %>1Fixture = require('./fixture/new-<%= name %>-1.js');

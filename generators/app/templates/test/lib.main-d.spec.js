@@ -12,7 +12,13 @@ describe('new <%= serverClassName %>(config, logger) -> <%= serverInstanceName %
       const config = {
         consul: { url: 'http://localhost:8001' },
         vault: {},
-        server: { url: 'http://localhost:8000' } };
+        server: {
+          url    : 'http://localhost:8000',
+          sslCA  : '',
+          sslKey : '',
+          sslCert: '',
+        }
+      };
       const <%= serverInstanceName %> = new <%= serverClassName %>(config, logger);
 
       sinon.stub(<%= serverInstanceName %>.database, 'connect').callsArgWith(0, null);
@@ -35,7 +41,10 @@ describe('new <%= serverClassName %>(config, logger) -> <%= serverInstanceName %
 
   describe('#stop(cb(err))', () => {
     it('starts the database and server', sinon.test((cb) => {
-      const config = { consul: { url: 'http://localhost:8001' } };
+      const config = {
+        consul: { url: 'http://localhost:8001' },
+        server: { sslCA: '', sslKey: '', sslCert: '' }
+      };
       const <%= serverInstanceName %> = new <%= serverClassName %>(config, logger);
 
       <%= serverInstanceName %>.isRunning = true;

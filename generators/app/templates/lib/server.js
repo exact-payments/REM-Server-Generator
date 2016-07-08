@@ -1,4 +1,6 @@
+const readFileSync      = require('fs').readFileSync;
 const http              = require('http');
+const https             = require('https');
 const url               = require('url');
 const express           = require('express');
 const expressBodyParser = require('body-parser');
@@ -18,11 +20,11 @@ class Server {
     this.database = database;
     this.tribune  = tribune;
 
-    this.logger.verbose('Creating express app and HTTP server instance');
-    this.expressApp  = express();
-    this._httpServer = http.createServer(this.expressApp);
-    this.logger.verbose('Express app and HTTP server instance created');
+    this.logger.verbose('Creating express app');
+    this.expressApp = express();
+    this.logger.verbose('Express app created');
 
+    this._setupServer();
     this._setupExpressMiddleware();
     this._setupExpressRoutes();
     this._setupErrorHandler();
@@ -40,6 +42,21 @@ class Server {
 
   close(cb) {
     this._httpServer.close(cb);
+  }
+
+  _setupServer() {
+    this.logger.verbose('Creating HTTP server instance');
+    if (this.config.server.sslKey && this.config.server.sslCert && this.config.server.sslCA) {
+      this._httpServer = https.createServer({
+        key : readFileSync(this.config.server.sslKey),
+        cert: readFileSync(this.config.server.sslCert),
+        ca  : readFileSync(this.config.server.sslCA)
+      }, this.expressApp);
+      this.logger.verbose('HTTP secure server instance created');
+      return;
+    }
+    this._httpServer = http.createServer(this.expressApp);
+    this.logger.verbose('HTTP server instance created');
   }
 
   _setupExpressMiddleware() {

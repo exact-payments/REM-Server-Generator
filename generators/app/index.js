@@ -237,8 +237,8 @@ var serverGenerator = generators.Base.extend({
 
     eslintignore: function() {
       this.fs.copy(
-        this.templatePath('eslintignore.json'),
-        this.destinationPath('.eslintignore.json')
+        this.templatePath('.eslintignore'),
+        this.destinationPath('.eslintignore')
       );
     },
 
@@ -336,20 +336,6 @@ var serverGenerator = generators.Base.extend({
       );
     },
 
-    winstonChildLogger: function() {
-      this.fs.copy(
-        this.templatePath('lib/winston-child-logger.js'),
-        this.destinationPath('lib/winston-child-logger.js')
-      );
-    },
-
-    winstonSentryTransport: function() {
-      this.fs.copy(
-        this.templatePath('lib/winston-sentry-transport.js'),
-        this.destinationPath('lib/winston-sentry-transport.js')
-      );
-    },
-
     routers: function() {
       var _this = this;
       this.routers.forEach(function(router) {
@@ -376,7 +362,6 @@ var serverGenerator = generators.Base.extend({
       let _this = this;
       const otherFixtures = [ 'new', 'update' ];
       const paths = [
-        'test/lib/assert-contains.js',
         'test/lib.database.spec.js',
         'test/mock/logger.js'
       ];
@@ -418,7 +403,7 @@ var serverGenerator = generators.Base.extend({
 
   install: function() {
     fs.chmodSync(this.destinationPath('bin/' + this.serverName), 0755);
-    this.installDependencies();
+    this.npmInstall();
   }
 });
 
