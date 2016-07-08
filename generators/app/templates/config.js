@@ -4,6 +4,9 @@ const milieu = require('milieu');
 const config = milieu('<%= serverConfigName %>', {
   server: {
     url            : 'http://localhost:8000',
+    sslCA          : '',
+    sslKey         : '',
+    sslCert        : '',
     maxResultsLimit: 1000
   },
   mongo: {

@@ -1,4 +1,6 @@
+const readFileSync      = require('fs').readFileSync;
 const http              = require('http');
+const https             = require('https');
 const url               = require('url');
 const express           = require('express');
 const expressBodyParser = require('body-parser');
@@ -18,11 +20,11 @@ class Server {
     this.database = database;
     this.tribune  = tribune;
 
-    this.logger.verbose('Creating express app and HTTP server instance');
-    this.expressApp  = express();
-    this._httpServer = http.createServer(this.expressApp);
-    this.logger.verbose('Express app and HTTP server instance created');
+    this.logger.verbose('Creating express app');
+    this.expressApp = express();
+    this.logger.verbose('Express app created');
 
+    this._setupServer();
     this._setupExpressMiddleware();
     this._setupExpressRoutes();
     this._setupErrorHandler();
