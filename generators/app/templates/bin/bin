@@ -1,16 +1,6 @@
 #! /usr/bin/env node
 
-const pkg = require('../package');
-
-console.log();
-console.log();
-<%- splashSrc %>
-console.log();
-console.log();
-console.log(`version: ${pkg.version} revision: ${pkg.revision}`);
-console.log();
-console.log();
-
+console.log(require('figlet').textSync('<%= splashName %>', { font: 'Ogre' }));
 
 const <%= serverInstanceName %> = require('../');
 

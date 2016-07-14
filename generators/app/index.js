@@ -1,7 +1,5 @@
 var path       = require('path');
 var yosay      = require('yosay');
-var chalk      = require('chalk');
-var figlet     = require('figlet');
 var generators = require('yeoman-generator');
 var fs         = require('fs');
 
@@ -25,13 +23,6 @@ var toCase = (str, strCase) => {
   throw new Error(strCase + ' is an invalid string case');
 };
 
-var genSplash = (serverName) => {
-  return figlet.textSync(serverName, { font: 'Ogre' })
-    .replace(/([\\'])/g, (_, m1) => '\\' + m1)
-    .split('\n')
-    .map((l) => 'console.log(\'' + l + '\');')
-    .join('\n');
-};
 
 var genSchemaRequireSrc = (schemas) => {
   return schemas.map((schema) => {
@@ -179,7 +170,6 @@ var serverGenerator = generators.Base.extend({
         this.schemas = this.schemas.map(genResourceNames);
 
         this.serverConfigName = this.serverInstanceName.toLowerCase();
-        this.splashSrc        = genSplash(this.serverName);
         this.schemaRequireSrc = genSchemaRequireSrc(this.schemas);
         this.schemaSetupSrc   = genSchemaSetupSrc(this.schemas);
         this.routerRequireSrc = genRouterRequireSrc(this.routers);
@@ -237,7 +227,7 @@ var serverGenerator = generators.Base.extend({
 
     eslintignore: function() {
       this.fs.copy(
-        this.templatePath('.eslintignore'),
+        this.templatePath('eslintignore'),
         this.destinationPath('.eslintignore')
       );
     },
@@ -277,7 +267,7 @@ var serverGenerator = generators.Base.extend({
         this.templatePath('bin/bin'),
         this.destinationPath('bin/' + this.serverName),
         {
-          splashSrc         : this.splashSrc,
+          splashName        : toCase(this.serverInstanceName, 'ClassCase'),
           serverInstanceName: this.serverInstanceName
         }
       );

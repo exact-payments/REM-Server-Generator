@@ -6,7 +6,7 @@ module.exports = function(nomad) {
 
   nomad.driver({
     connect(cb) {
-      MongoClient.connect(config.server.url, (err, db) => {
+      MongoClient.connect(config.mongo.url, (err, db) => {
         if (err) { return cb(err); }
         this.db = db;
         cb(null, db);
