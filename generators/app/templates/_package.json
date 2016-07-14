@@ -29,6 +29,7 @@
     "express": "^4.13.1",
     "express-rest-api": "^0.1.0",
     "extend": "^3.0.0",
+    "figlet": "^1.1.2",
     "milieu": "1.0.1",
     "mongoose": "^4.4.9",
     "mongoose-count-and-find": "^1.0.0",
