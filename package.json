@@ -1,6 +1,6 @@
 {
   "name": "generator-rem-server",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "A generator for creating REM Servers. REM Server stands for Robert's Express & Mongo Server.",
   "author": "Robert Hurst<robertwhurst@gmail.com>",
   "main": "generators/app/index.js",
