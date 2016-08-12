@@ -55,7 +55,7 @@
     "faker": "^3.0.1",
     "istanbul": "^0.4.3",
     "methods": "^1.1.1",
-    "mocha": "^2.4.5",
+    "mocha": "^3.0.2",
     "mocha-bamboo-reporter": "^1.1.0",
     "mongodb": "^2.1.7",
     "node-inspector": "^0.12.7",
