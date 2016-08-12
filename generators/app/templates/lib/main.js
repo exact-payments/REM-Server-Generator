@@ -2,7 +2,7 @@ const async       = require('async');
 const Database    = require('./database');
 const Tribune     = require('tribune');
 const Server      = require('./server');
-const vaultConfig = require('./vault-config');
+const vaultConfig = require('@fintechdev/vault-config');
 
 class <%= serverClassName %> {
 
