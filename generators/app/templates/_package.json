@@ -44,7 +44,7 @@
     "tribune": "^1.0.1",
     "winston": "^2.1.1",
     "winston-child-logger": "0.0.1",
-    "winston-sentry-transport": "0.0.1",
+    "winston-sentry-transport": "0.0.1"
   },
   "devDependencies": {
     "assert-contains": "0.0.1",
