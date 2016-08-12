@@ -10,7 +10,6 @@ describe('new <%= serverClassName %>(config, logger) -> <%= serverInstanceName %
   describe('#start(cb(err))', () => {
     it('starts the database and server', sinon.test((cb) => {
       const config = {
-        consul: { url: 'http://localhost:8001' },
         vault: {},
         server: {
           url    : 'http://localhost:8000',
@@ -40,7 +39,6 @@ describe('new <%= serverClassName %>(config, logger) -> <%= serverInstanceName %
   describe('#stop(cb(err))', () => {
     it('starts the database and server', sinon.test((cb) => {
       const config = {
-        consul: { url: 'http://localhost:8001' },
         server: { sslCA: '', sslKey: '', sslCert: '' }
       };
       const <%= serverInstanceName %> = new <%= serverClassName %>(config, logger);
