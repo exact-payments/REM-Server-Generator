@@ -21,19 +21,11 @@ const connection = test.database.mongoose.connection;
 request = request.defaults({ baseUrl: 'http://localhost:8050' });
 
 describe('<%= className %> Routes', () => {
-  before( (cb) => {
-    sinon.stub(test.tribune, 'register').callsArgWith(2, null);
-    test.start(cb);
-  });
-  beforeEach( (cb) => connection.db.collection('<%= instanceName %>s').remove({}, cb));
-  after( (cb) => {
-    sinon.stub(test.tribune, 'deregister').callsArgWith(0, null);
-    test.stop(() => {
-      test.tribune.register.restore();
-      test.tribune.deregister.restore();
-      cb();
-    });
-  });
+  before(done => test.start(done) );
+
+  beforeEach(done => { connection.db.collection('<%= instanceName %>s').remove({}, done); });
+
+  after(done => test.stop(done));
 
   describe('Create <%= className %> Route - POST /', () => {
     it('creates a <%= instanceName %> document in the database', (cb) => {
@@ -73,7 +65,7 @@ describe('<%= className %> Routes', () => {
       });
     });
   });
- 
+
   describe('Query <%= className %> Route - GET /', () => {
     beforeEach( (cb) => connection.db.collection('<%= instanceName %>s').insertOne(<%= instanceName %>1Fixture, cb));
 
