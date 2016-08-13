@@ -1,12 +1,14 @@
-const readFileSync      = require('fs').readFileSync;
+const url               = require('url');
 const http              = require('http');
 const https             = require('https');
-const url               = require('url');
 const express           = require('express');
-const expressBodyParser = require('body-parser');
-const expressRest       = require('express-rest-api');
+const request           = require('request');
 const prettyMs          = require('pretty-ms');
+const expressBodyParser = require('body-parser');
 const onFinished        = require('on-finished');
+const expressRest       = require('express-rest-api');
+const readFileSync      = require('fs').readFileSync;
+
 const config            = require('../config');
 
 <%- routerRequireSrc %>
@@ -14,11 +16,10 @@ const config            = require('../config');
 
 class Server {
 
-  constructor(config, logger, database, tribune) {
+  constructor(config, logger, database) {
     this.config   = config;
     this.logger   = logger.child({ context: 'Server' });
     this.database = database;
-    this.tribune  = tribune;
 
     this.logger.verbose('Creating express app');
     this.expressApp = express();
@@ -61,7 +62,7 @@ class Server {
 
   _setupExpressMiddleware() {
     this.expressApp.request.config       = this.config;
-    this.expressApp.request.service      = (...args) => this.tribune.service(...args);
+    this.expressApp.request.service      = request;
     this.expressApp.request.model        = (...args) => this.database.model(...args);
     this.expressApp.request.pingDatabase = (...args) => this.database.ping(...args);
 

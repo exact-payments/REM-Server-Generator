@@ -21,11 +21,12 @@ const connection = test.database.mongoose.connection;
 request = request.defaults({ baseUrl: 'http://localhost:8050' });
 
 describe('<%= className %> Routes', () => {
-  before(done => test.start(done) );
+  before(done => test.start(done));
 
   beforeEach(done => { connection.db.collection('<%= instanceName %>s').remove({}, done); });
 
   after(done => test.stop(done));
+
 
   describe('Create <%= className %> Route - POST /', () => {
     it('creates a <%= instanceName %> document in the database', (cb) => {
