@@ -1,18 +1,17 @@
 /* eslint-disable max-len */
 /* global describe it before beforeEach after */
 
-let request = require('request');
-const assert = require('assert');
-const sinon = require('sinon');
+let request          = require('request');
+const assert         = require('assert');
 const assertContains = require('assert-contains');
-const config = require('../config');
+const config         = require('../config');
 
-const new<%= className %>1Fixture = require('./fixture/new-<%= name %>-1.js');
-const <%= instanceName %>1Fixture = require('./fixture/<%= name %>-1.js');
-const update<%= className %>1Fixture = require('./fixture/update-<%= name %>-1.js');
+const new<%= className %>1Fixture = require('./fixture/new-<%= name %>-1');
+const <%= instanceName %>1Fixture = require('./fixture/<%= name %>-1');
+const update<%= className %>1Fixture = require('./fixture/update-<%= name %>-1');
 
 config.server.url = 'http://localhost:8050';
-config.mongo.url = 'mongodb://localhost/exact_batchd_test';
+config.mongo.url = 'mongodb://localhost/<%= serverInstanceName %>-test';
 config.logger = {};
 
 const test = require('../');

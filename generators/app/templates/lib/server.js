@@ -72,7 +72,7 @@ class Server {
         req.headers['x-request-id'] ? { requestId: req.headers['x-request-id'] } : {}
       );
 
-      req.logger.info('Incoming request', {
+      req.logger.debug('Incoming request', {
         httpVersion: req.httpVersion,
         method     : req.method,
         url        : req.url,
@@ -81,7 +81,7 @@ class Server {
       });
 
       onFinished(res, () => {
-        req.logger.info('Outgoing response', {
+        req.logger.debug('Outgoing response', {
           httpVersion: req.httpVersion,
           method     : req.method,
           url        : req.url,

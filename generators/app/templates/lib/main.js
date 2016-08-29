@@ -48,8 +48,8 @@ class <%= serverClassName %> {
 
     this.logger.verbose('Stopping <%= serverClassName %>');
     async.parallel([
-      (cb) => { this.database.disconnect(cb); },
-      (cb) => { this.server.close(cb); }
+      (cb) => this.database.disconnect(cb),
+      (cb) => this.server.close(cb)
     ], (err) => {
       if (err) { return cb(err); }
 
