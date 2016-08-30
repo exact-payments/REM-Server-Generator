@@ -1,4 +1,4 @@
-## Robert's Express & Mongo Server Yoman generator
+## Robert's Express & Mongo Server Yeoman generator
 
 ![generator](http://yeoman.io/static/illustration-home-inverted.91b07808be.png)
 
