@@ -278,8 +278,8 @@ const serverGenerator = generators.Base.extend({
         { serverClassName: this.serverClassName }
       );
       this.fs.copyTpl(
-        this.templatePath('test/lib.main-d.spec.js'),
-        this.destinationPath(`test/lib.${this.serverName}-d.spec.js`),
+        this.templatePath('test/lib.main.spec.js'),
+        this.destinationPath(`test/lib.${this.serverName}.spec.js`),
         {
           serverClassName: this.serverClassName,
           serverInstanceName: this.serverInstanceName,
