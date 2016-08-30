@@ -103,4 +103,26 @@ describe('REM-Server-Generator', () => {
     });
   });
 
+  describe('spec', () => {
+    it('generates a test/lib.database.spec.js file', () => {
+      assert.file(['test/lib.database.spec.js']);
+    });
+
+    it('generates a test/lib.server-name.spec.js file', () => {
+      assert.file(['test/lib.server-name.spec.js']);
+    });
+
+    it('generates a test/route.baz-baz.spec.js file', () => {
+      assert.file(['test/route.baz-baz.spec.js']);
+    });
+
+    it('generates a test/route.foo.spec.js file', () => {
+      assert.file(['test/route.foo.spec.js']);
+    });
+
+    it('generates a test/route.bar.spec.js file', () => {
+      assert.file(['test/route.bar.spec.js']);
+    });
+  });
+
 });
