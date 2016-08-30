@@ -12,7 +12,7 @@ const genSchemaRequireSrc = (schemas) => schemas.map((schema) => {
 }).join('\n');
 
 const genSchemaSetupSrc = (schemas) => schemas.map((schema) => {
-  const req = `  this.mongoose.model(\'${schema.className}\', ${schema.instanceName}Schema);`;
+  const req = `this.mongoose.model(\'${schema.className}\', ${schema.instanceName}Schema);`;
   return req;
 }).join('\n');
 
@@ -22,7 +22,7 @@ const genRouterRequireSrc = (routers) => routers.map((router) => {
 }).join('\n');
 
 const genRouterSetupSrc = (routers) => routers.map((router) => {
-  const req = `  this.expressApp.use(\'/${router.name}\', ${router.instanceName}Router);`;
+  const req = `this.expressApp.use(\'/${router.name}\', ${router.instanceName}Router);`;
   return req;
 }).join('\n');
 
@@ -250,6 +250,16 @@ const serverGenerator = generators.Base.extend({
       );
     },
 
+    explainConfig() {
+      this.fs.copyTpl(
+        this.templatePath('bin/explain-config'),
+        this.destinationPath(`bin/${this.serverName}-explain-config`),
+        {
+          splashName: toCase.title(this.serverInstanceName)
+        }
+      );
+    },
+
     database() {
       this.fs.copyTpl(
         this.templatePath('lib/database.js'),
@@ -356,6 +366,7 @@ const serverGenerator = generators.Base.extend({
 
   install() {
     fs.chmodSync(this.destinationPath(`bin/${this.serverName}`), '0755');
+    fs.chmodSync(this.destinationPath(`bin/${this.serverName}-explain-config`), '0755');
     this.npmInstall();
   }
 });

@@ -51,6 +51,16 @@ describe('REM-Server-Generator', () => {
     assert.file(['.gitignore']);
   });
 
+  describe('bin', () => {
+    it('generates a bin/server-name file', () => {
+      assert.file(['bin/server-name']);
+    });
+
+    it('generates a bin/server-name-explain-config file', () => {
+      assert.file(['bin/server-name-explain-config']);
+    });
+  });
+
   describe('lib', () => {
     it('generates a lib/server-name.js file', () => {
       assert.file(['lib/server-name.js']);

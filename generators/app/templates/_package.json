@@ -5,7 +5,8 @@
   "description": "<%= serverDescription %>",
   "main": "index.js",
   "bin": {
-    "<%= serverName %>": "./bin/<%= serverName %>"
+    "<%= serverName %>": "./bin/<%= serverName %>",
+    "<%= serverName %>-explain-config": "./bin/<%= serverName %>-explain-config"
   },
   "scripts": {
     "start": "./bin/<%= serverName %>",
@@ -14,7 +15,7 @@
     "debug-test": "node-debug _mocha test/*.spec.js",
     "cover": "istanbul cover _mocha test/*.spec.js",
     "eslint": "eslint . --ext .js",
-    "explain-config": "./bin/<%= serverName %> --explain-config"
+    "explain-config": "./bin/<%= serverName %>-explain-config"
   },
   "author": {
     "name": "<%= authorName %>",
