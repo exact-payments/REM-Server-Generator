@@ -30,7 +30,7 @@ const genRouterSetupSrc = (routers) => routers.map((router) => {
 const genResourceNames = function(name) {
   return {
     name        : toCase.slug(name),
-    className   : toCase.title(name),
+    className   : toCase.pascal(name),
     instanceName: toCase.camel(name)
   };
 };
@@ -125,7 +125,7 @@ const serverGenerator = generators.Base.extend({
       }]).then(answers => {
 
         this.serverName         = toCase.slug(answers.name);
-        this.serverClassName    = toCase.title(answers.name);
+        this.serverClassName    = toCase.pascal(answers.name);
         this.serverInstanceName = toCase.camel(answers.name);
         this.serverDescription  = answers.serverDescription;
         this.serverVersion      = answers.serverVersion;
@@ -244,7 +244,7 @@ const serverGenerator = generators.Base.extend({
         this.templatePath('bin/bin'),
         this.destinationPath(`bin/${this.serverName}`),
         {
-          splashName        : toCase.title(this.serverInstanceName),
+          splashName        : toCase.pascal(this.serverInstanceName),
           serverInstanceName: this.serverInstanceName
         }
       );
@@ -255,7 +255,7 @@ const serverGenerator = generators.Base.extend({
         this.templatePath('bin/explain-config'),
         this.destinationPath(`bin/${this.serverName}-explain-config`),
         {
-          splashName: toCase.title(this.serverInstanceName)
+          splashName: toCase.pascal(this.serverInstanceName)
         }
       );
     },
