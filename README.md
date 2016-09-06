@@ -1,14 +1,10 @@
+## Robert's Express & Mongo Server Yeoman generator
+
+![generator](http://yeoman.io/static/illustration-home-inverted.91b07808be.png)
+
 ## Installation
 
-First, install [Yeoman](http://yeoman.io) and generator-rem-server using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)).
-
-```bash
-npm install -g yo
-npm install -g generator-rem-server
-```
-
-Then generate your new project:
-
-```bash
-yo rem-server
-```
+- Make sure you have [yeoman](https://github.com/yeoman/yo) installed on your machine:
+    `npm install -g yo`
+- Install the generator **globally**: `npm install -g generator-rem-server`
+- Generate your new project: `yo rem-server`, or `yo` and choose `Rem Server` option

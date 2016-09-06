@@ -1,70 +1,50 @@
-var path       = require('path');
-var yosay      = require('yosay');
-var generators = require('yeoman-generator');
-var fs         = require('fs');
+const path       = require('path');
+const yosay      = require('yosay');
+const generators = require('yeoman-generator');
+const fs         = require('fs');
+const toCase     = require('to-case');
 
 
-var toCase = (str, strCase) => {
-  str = str.replace(/[^\w\d_-]/, '');
 
-  if (strCase === 'kebab-case') {
-    return str
-      .replace(/([\w\d])[_ ]([\w\d])/g, (_, m1, m2) => m1 + '-' + m2)
-      .replace(/([\w\d])?([A-Z])/g, (_, m1, m2) => m1 ? m1 + '-' + m2.toLowerCase() : m2.toLowerCase());
-  }
-  if (strCase === 'camelCase') {
-    return str.replace(/([\w\d])[-_ ]([\w\d])/g, (_, m1, m2) => m1 + m2.toUpperCase());
-  }
-  if (strCase === 'ClassCase') {
-    str = str.replace(/([\w\d])[-_ ]([\w\d])/g, (_, m1, m2) => m1 + m2.toUpperCase());
-    return str.slice(0, 1).toUpperCase() + str.slice(1);
-  }
+const genSchemaRequireSrc = (schemas) => schemas.map((schema) => {
+  const req = `const ${schema.instanceName}Schema = require(\'../schema/${schema.name}\');`;
+  return req;
+}).join('\n');
 
-  throw new Error(strCase + ' is an invalid string case');
-};
+const genSchemaSetupSrc = (schemas) => schemas.map((schema) => {
+  const req = `this.mongoose.model(\'${schema.className}\', ${schema.instanceName}Schema);`;
+  return req;
+}).join('\n');
+
+const genRouterRequireSrc = (routers) => routers.map((router) => {
+  const req = `const ${router.instanceName}Router = require(\'../route/${router.name}\');`;
+  return req;
+}).join('\n');
+
+const genRouterSetupSrc = (routers) => routers.map((router) => {
+  const req = `this.expressApp.use(\'/${router.name}\', ${router.instanceName}Router);`;
+  return req;
+}).join('\n');
 
 
-var genSchemaRequireSrc = (schemas) => {
-  return schemas.map((schema) => {
-    return 'const ' + schema.instanceName + 'Schema = require(\'../schema/' + schema.name + '\');';
-  }).join('\n');
-};
-
-var genSchemaSetupSrc = (schemas) => {
-  return schemas.map((schema) => {
-    return '    this.mongoose.model(\'' + schema.className + '\', ' + schema.instanceName + 'Schema);';
-  }).join('\n');
-};
-
-var genRouterRequireSrc = (routers) => {
-  return routers.map((router) => {
-    return 'const ' + router.instanceName + 'Router = require(\'../route/' + router.name + '\');';
-  }).join('\n');
-};
-
-var genRouterSetupSrc = (routers) => {
-  return routers.map((router) => {
-    return '    this.expressApp.use(\'/' + router.name + '\', ' + router.instanceName + 'Router);';
-  }).join('\n');
-};
-
-var genResourceNames = function(name) {
+const genResourceNames = function(name) {
   return {
-    name        : toCase(name, 'kebab-case'),
-    className   : toCase(name, 'ClassCase'),
-    instanceName: toCase(name, 'camelCase')
+    name        : toCase.slug(name),
+    className   : toCase.pascal(name),
+    instanceName: toCase.camel(name)
   };
 };
 
 
-var serverGenerator = generators.Base.extend({
+const serverGenerator = generators.Base.extend({
   prompting: {
-    welcome: function() {
-      this.log(yosay('\'Allo \'allo! Out of the box I include Express and Mongoose, as well as a few other goodies, to build your REM Server.'));
+    welcome() {
+      this.log(yosay(
+        '\'Allo \'allo! Out of the box I include Express and Mongoose, as well as a ' +
+        'few other goodies, to build your REM Server.'));
     },
-    ask: function() {
-      var done = this.async();
-      this.prompt([{
+    ask() {
+      return this.prompt([{
         name    : 'name',
         type    : 'input',
         message : 'What is the name of the server?',
@@ -102,7 +82,7 @@ var serverGenerator = generators.Base.extend({
         name    : 'databaseName',
         type    : 'input',
         message : 'what should the database be named?',
-        default : (answers) => toCase(answers.name, 'kebab-case')
+        default : (answers) => toCase.slug(answers.name)
       }, {
         name   : 'generationType',
         type   : 'checkbox',
@@ -142,11 +122,11 @@ var serverGenerator = generators.Base.extend({
         message : 'What schemas do you want me to add?',
         filter  : (answer) => answer.split(' '),
         validate: (answer) => (/^[\w\d-]+(?: [\w\d-]+)*$/).test(answer)
-      }], (answers) => {
+      }]).then(answers => {
 
-        this.serverName         = toCase(answers.name, 'kebab-case');
-        this.serverClassName    = toCase(answers.name, 'ClassCase');
-        this.serverInstanceName = toCase(answers.name, 'camelCase');
+        this.serverName         = toCase.slug(answers.name);
+        this.serverClassName    = toCase.pascal(answers.name);
+        this.serverInstanceName = toCase.camel(answers.name);
         this.serverDescription  = answers.serverDescription;
         this.serverVersion      = answers.serverVersion;
         this.serverRevision     = answers.serverRevision;
@@ -174,22 +154,19 @@ var serverGenerator = generators.Base.extend({
         this.schemaSetupSrc   = genSchemaSetupSrc(this.schemas);
         this.routerRequireSrc = genRouterRequireSrc(this.routers);
         this.routerSetupSrc   = genRouterSetupSrc(this.routers);
-
-        done(null);
       });
     }
   },
 
   writing: {
-
-    circle: function() {
+    circle() {
       this.fs.copy(
         this.templatePath('_circle.yml'),
         this.destinationPath('circle.yml')
       );
     },
 
-    config: function() {
+    config() {
       this.fs.copyTpl(
         this.templatePath('config.js'),
         this.destinationPath('config.js'),
@@ -200,14 +177,14 @@ var serverGenerator = generators.Base.extend({
       );
     },
 
-    gitignore: function() {
+    gitignore() {
       this.fs.copy(
         this.templatePath('gitignore'),
         this.destinationPath('.gitignore')
       );
     },
 
-    index: function() {
+    index() {
       this.fs.copyTpl(
         this.templatePath('index.js'),
         this.destinationPath('index.js'),
@@ -218,35 +195,35 @@ var serverGenerator = generators.Base.extend({
       );
     },
 
-    eslintrc: function() {
+    eslintrc() {
       this.fs.copy(
         this.templatePath('eslintrc.json'),
         this.destinationPath('.eslintrc.json')
       );
     },
 
-    eslintignore: function() {
+    eslintignore() {
       this.fs.copy(
         this.templatePath('eslintignore'),
         this.destinationPath('.eslintignore')
       );
     },
 
-    logger: function() {
+    logger() {
       this.fs.copy(
         this.templatePath('logger.js'),
         this.destinationPath('logger.js')
       );
     },
 
-    NomadFile: function() {
+    NomadFile() {
       this.fs.copy(
         this.templatePath('_NomadFile.js'),
         this.destinationPath('NomadFile.js')
       );
     },
 
-    packageJSON: function() {
+    packageJSON() {
       this.fs.copyTpl(
         this.templatePath('_package.json'),
         this.destinationPath('package.json'),
@@ -262,18 +239,28 @@ var serverGenerator = generators.Base.extend({
       );
     },
 
-    bin: function() {
+    bin() {
       this.fs.copyTpl(
         this.templatePath('bin/bin'),
-        this.destinationPath('bin/' + this.serverName),
+        this.destinationPath(`bin/${this.serverName}`),
         {
-          splashName        : toCase(this.serverInstanceName, 'ClassCase'),
+          splashName        : toCase.pascal(this.serverInstanceName),
           serverInstanceName: this.serverInstanceName
         }
       );
     },
 
-    database: function() {
+    explainConfig() {
+      this.fs.copyTpl(
+        this.templatePath('bin/explain-config'),
+        this.destinationPath(`bin/${this.serverName}-explain-config`),
+        {
+          splashName: toCase.pascal(this.serverInstanceName)
+        }
+      );
+    },
+
+    database() {
       this.fs.copyTpl(
         this.templatePath('lib/database.js'),
         this.destinationPath('lib/database.js'),
@@ -284,15 +271,15 @@ var serverGenerator = generators.Base.extend({
       );
     },
 
-    main: function() {
+    main() {
       this.fs.copyTpl(
         this.templatePath('lib/main.js'),
-        this.destinationPath(`lib/${ this.serverName }.js`),
+        this.destinationPath(`lib/${this.serverName}.js`),
         { serverClassName: this.serverClassName }
       );
       this.fs.copyTpl(
-        this.templatePath('test/lib.main-d.spec.js'),
-        this.destinationPath(`test/lib.${ this.serverName }-d.spec.js`),
+        this.templatePath('test/lib.main.spec.js'),
+        this.destinationPath(`test/lib.${this.serverName}.spec.js`),
         {
           serverClassName: this.serverClassName,
           serverInstanceName: this.serverInstanceName,
@@ -301,14 +288,7 @@ var serverGenerator = generators.Base.extend({
       );
     },
 
-    mongooseSlugs: function() {
-      this.fs.copy(
-        this.templatePath('lib/mongoose-slugs.js'),
-        this.destinationPath('lib/mongoose-slugs.js')
-      );
-    },
-
-    server: function() {
+    server() {
       this.fs.copyTpl(
         this.templatePath('lib/server.js'),
         this.destinationPath('lib/server.js'),
@@ -319,71 +299,64 @@ var serverGenerator = generators.Base.extend({
       );
     },
 
-    vaultConfig: function() {
-      this.fs.copy(
-        this.templatePath('lib/vault-config.js'),
-        this.destinationPath('lib/vault-config.js')
-      );
-    },
-
-    routers: function() {
-      var _this = this;
-      this.routers.forEach(function(router) {
-        _this.fs.copyTpl(
-          _this.templatePath('router.js'),
-          _this.destinationPath('route/' + router.name + '.js'),
+    routers() {
+      this.routers.forEach(router => {
+        this.fs.copyTpl(
+          this.templatePath('router.js'),
+          this.destinationPath(`route/${router.name}.js`),
           router
         );
       });
     },
 
-    schemas: function() {
-      var _this = this;
-      this.schemas.forEach(function(schema) {
-        _this.fs.copyTpl(
-          _this.templatePath('schema.js'),
-          _this.destinationPath('schema/' + schema.name + '.js'),
+    schemas() {
+      this.schemas.forEach(schema => {
+        this.fs.copyTpl(
+          this.templatePath('schema.js'),
+          this.destinationPath(`schema/${schema.name}.js`),
           schema
         );
       });
     },
 
-    resourceTests: function() {
-      let _this = this;
-      const otherFixtures = [ 'new', 'update' ];
+    resourceTests() {
+      const otherFixtures = ['new', 'update'];
       const paths = [
         'test/lib.database.spec.js',
         'test/mock/logger.js'
       ];
 
-      paths.forEach( (path) => {
-        _this.fs.copy(
-          _this.templatePath(path),
-          _this.destinationPath(path)
+      paths.forEach(path => {
+        this.fs.copy(
+          this.templatePath(path),
+          this.destinationPath(path)
         );
       });
 
-      _this.resources.forEach( (resource) => {
+      this.resources.forEach(resource => {
         const templateArgs = {
-          instanceName: resource.instanceName,
-          className: resource.className,
-          name: resource.name,
-          serverInstanceName: _this.serverInstanceName
+          instanceName      : resource.instanceName,
+          className         : resource.className,
+          name              : resource.name,
+          serverInstanceName: this.serverInstanceName
         };
-        _this.fs.copyTpl(
-          _this.templatePath('test/route.spec.js'),
-          _this.destinationPath(`test/route.${ resource.name }.spec.js`),
+
+        this.fs.copyTpl(
+          this.templatePath('test/route.spec.js'),
+          this.destinationPath(`test/route.${resource.name}.spec.js`),
           templateArgs
         );
-        _this.fs.copyTpl(
-          _this.templatePath('test/fixture/instance.js'),
-          _this.destinationPath(`test/fixture/${ resource.name }-1.js`),
+
+        this.fs.copyTpl(
+          this.templatePath('test/fixture/instance.js'),
+          this.destinationPath(`test/fixture/${resource.name}-1.js`),
           templateArgs
         );
-        otherFixtures.forEach( (fixture) => {
-          _this.fs.copyTpl(
-            _this.templatePath(`test/fixture/${fixture}.js`),
-            _this.destinationPath(`test/fixture/${fixture}-${ resource.name }-1.js`),
+
+        otherFixtures.forEach(fixture => {
+          this.fs.copyTpl(
+            this.templatePath(`test/fixture/${fixture}.js`),
+            this.destinationPath(`test/fixture/${fixture}-${resource.name}-1.js`),
             templateArgs
           );
         });
@@ -391,8 +364,9 @@ var serverGenerator = generators.Base.extend({
     }
   },
 
-  install: function() {
-    fs.chmodSync(this.destinationPath('bin/' + this.serverName), 0755);
+  install() {
+    fs.chmodSync(this.destinationPath(`bin/${this.serverName}`), '0755');
+    fs.chmodSync(this.destinationPath(`bin/${this.serverName}-explain-config`), '0755');
     this.npmInstall();
   }
 });

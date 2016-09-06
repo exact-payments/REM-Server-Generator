@@ -15,7 +15,7 @@ describe('new <%= serverClassName %>(config, logger) -> <%= serverInstanceName %
           url    : 'http://localhost:8000',
           sslCA  : '',
           sslKey : '',
-          sslCert: '',
+          sslCert: ''
         }
       };
       const <%= serverInstanceName %> = new <%= serverClassName %>(config, logger);
@@ -37,7 +37,7 @@ describe('new <%= serverClassName %>(config, logger) -> <%= serverInstanceName %
   });
 
   describe('#stop(cb(err))', () => {
-    it('starts the database and server', sinon.test((cb) => {
+    it('stops the database and server', sinon.test((cb) => {
       const config = {
         server: { sslCA: '', sslKey: '', sslCert: '' }
       };

@@ -1,5 +1,5 @@
 const Schema        = require('mongoose').Schema;
-const mongooseSlugs = require('../lib/mongoose-slugs');
+const mongooseSlugs = require('mongoose-document-slugs');
 
 
 const <%= instanceName %>Schema = new Schema({

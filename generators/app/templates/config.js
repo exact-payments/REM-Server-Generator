@@ -21,7 +21,7 @@ const config = milieu('<%= serverConfigName %>', {
       dsn: ''
     },
     console: {
-      level                          : 'silly',
+      level                          : 'debug',
       timestamp                      : true,
       handleExceptions               : true,
       humanReadableUnhandledException: true,

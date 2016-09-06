@@ -2,6 +2,7 @@
 
 const figlet = require('figlet');
 const pkg    = require('../package');
+const config = require('../config');
 
 console.log();
 console.log(figlet.textSync('<%= splashName %>', { font: 'Ogre' }));
@@ -9,11 +10,4 @@ console.log();
 console.log(`version: ${pkg.version} revision: ${pkg.revision}`);
 console.log();
 
-
-const <%= serverInstanceName %> = require('../');
-
-
-<%= serverInstanceName %>.start((err, result) => {
-  if (err) { throw err; }
-  <%= serverInstanceName %>.logger.info('Listening for HTTP requests at %s', result.url);
-});
+config.printExplainTable();
