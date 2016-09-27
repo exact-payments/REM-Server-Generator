@@ -27,7 +27,7 @@
   "repository": "RobertWHurst/generator-rem-server",
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^3.5.0",
+    "eslint": "^3.6.0",
     "eslint-config-airbnb": "^12.0.0",
     "eslint-plugin-import": "^1.12.0",
     "eslint-plugin-jsx-a11y": "^2.0.1",
